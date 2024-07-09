@@ -50,14 +50,14 @@
         coin.addEventListener('click', () => {
             count += 1;
             counter.textContent = count;
-            fetch(`https://your-server.com/update_clicks?user_id=${userId}&count=${count}&initData=${initData}`)
+            fetch(`https://lonya.github.io/WebAppiBotT/update_clicks?user_id=${userId}&count=${count}&initData=${initData}`)
                 .then(response => response.json())
                 .then(data => console.log(data))
                 .catch(error => console.error('Error:', error));
         });
 
         // Fetch initial count from the server
-        fetch(`https://your-server.com/get_clicks?user_id=${userId}&initData=${initData}`)
+        fetch(`https://lonya.github.io/WebAppiBotT/get_clicks?user_id=${userId}&initData=${initData}`)
             .then(response => response.json())
             .then(data => {
                 count = data.count;
