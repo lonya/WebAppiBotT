@@ -34,6 +34,15 @@
     <div id="coin"></div>
     <script>
         const tg = window.Telegram.WebApp;
+        const initData = tg.initData || "";
+        const initDataUnsafe = tg.initDataUnsafe || {};
+
+        if (!initData || !initDataUnsafe.user) {
+            document.body.innerHTML = "<h1>Unauthorized</h1>";
+            throw new Error("Unauthorized");
+        }
+
+        const userId = initDataUnsafe.user.id;
         const coin = document.getElementById('coin');
         const counter = document.getElementById('counter');
         let count = 0;
@@ -41,7 +50,20 @@
         coin.addEventListener('click', () => {
             count += 1;
             counter.textContent = count;
+            fetch(`https://your-server.com/update_clicks?user_id=${userId}&count=${count}&initData=${initData}`)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
         });
+
+        // Fetch initial count from the server
+        fetch(`https://your-server.com/get_clicks?user_id=${userId}&initData=${initData}`)
+            .then(response => response.json())
+            .then(data => {
+                count = data.count;
+                counter.textContent = count;
+            })
+            .catch(error => console.error('Error:', error));
     </script>
 </body>
 </html>
