@@ -8,12 +8,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             height: 100vh;
-            margin: 0;
             background-color: #f0f0f0;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
         .container {
             text-align: center;
@@ -21,11 +28,9 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex-grow: 1;
+            width: 100%;
+            max-width: 600px;
             display: none; /* Все страницы скрыты по умолчанию */
-        }
-        #workPage, #friendsPage {
-            display: none;
         }
         .active {
             display: block; /* Отображаем активную страницу */
@@ -36,6 +41,9 @@
             background-color: #ffffff;
             padding: 10px;
             border-top: 1px solid #ccc;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
         }
         .menu button {
             padding: 10px;
@@ -43,6 +51,7 @@
             background-color: #f0f0f0;
             border: none;
             cursor: pointer;
+            font-size: 16px;
         }
         .menu button.active {
             background-color: #d0d0d0;
@@ -50,14 +59,18 @@
     </style>
 </head>
 <body>
-    <!-- Контейнеры для страниц -->
-    <div id="workPage" class="container active">
-        <h1>Привет, это Work страница!</h1>
-        <p>Здесь ты можешь выполнять работу.</p>
-    </div>
-    <div id="friendsPage" class="container">
-        <h1>Привет, это Friends страница!</h1>
-        <p>Здесь будут отображаться твои друзья.</p>
+    <!-- Контейнер для контента -->
+    <div class="content">
+        <!-- Страница Work -->
+        <div id="workPage" class="container active">
+            <h1>Привет, это Work страница!</h1>
+            <p>Здесь ты можешь выполнять работу.</p>
+        </div>
+        <!-- Страница Friends -->
+        <div id="friendsPage" class="container">
+            <h1>Привет, это Friends страница!</h1>
+            <p>Здесь будут отображаться твои друзья.</p>
+        </div>
     </div>
 
     <!-- Нижнее меню -->
