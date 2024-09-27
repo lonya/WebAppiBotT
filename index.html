@@ -6,51 +6,45 @@
     <title>Мини-приложение</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            background-color: #f0f0f0;
         }
         .content {
             flex-grow: 1;
+            padding: 20px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            overflow-y: auto;
         }
         .container {
-            text-align: center;
-            padding: 20px;
+            width: 100%;
+            max-width: 600px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .district {
-            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
         }
         .district img {
             width: 50px;
             height: 50px;
+            object-fit: cover;
         }
-        .job {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .job img {
-            width: 50px;
-            height: 50px;
+        .district button {
+            padding: 10px 20px;
+            flex-shrink: 0;
         }
         .menu {
             display: flex;
@@ -61,6 +55,7 @@
             position: sticky;
             bottom: 0;
             width: 100%;
+            box-sizing: border-box;
         }
         .menu button {
             padding: 10px;
@@ -73,107 +68,54 @@
         .menu button.active {
             background-color: #d0d0d0;
         }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <!-- Контейнер для страницы с районами -->
-    <div id="districtsPage" class="container">
-        <h1>Выберите район</h1>
-        <div class="district">
-            <img src="https://via.placeholder.com/50" alt="Район 1">
-            <span>Район 1</span>
-            <button onclick="openDistrict(1)">Перейти</button>
-        </div>
-        <div class="district">
-            <img src="https://via.placeholder.com/50" alt="Район 2">
-            <span>Район 2</span>
-            <button onclick="openDistrict(2)">Перейти</button>
-        </div>
-        <div class="district">
-            <img src="https://via.placeholder.com/50" alt="Район 3">
-            <span>Район 3</span>
-            <button onclick="openDistrict(3)">Перейти</button>
+    <div class="content">
+        <div id="districtsPage" class="container">
+            <h1>Выберите район</h1>
+            <div class="district">
+                <img src="https://via.placeholder.com/50" alt="Район 1">
+                <span>Район 1</span>
+                <button onclick="openDistrict(1)">Перейти</button>
+            </div>
+            <div class="district">
+                <img src="https://via.placeholder.com/50" alt="Район 2">
+                <span>Район 2</span>
+                <button onclick="openDistrict(2)">Перейти</button>
+            </div>
+            <div class="district">
+                <img src="https://via.placeholder.com/50" alt="Район 3">
+                <span>Район 3</span>
+                <button onclick="openDistrict(3)">Перейти</button>
+            </div>
         </div>
     </div>
 
-    <!-- Контейнер для страницы с работами -->
-    <div id="jobsPage" class="container" style="display: none;">
-        <h1 id="districtName">Работы</h1>
-        <div id="jobsList">
-            <!-- Здесь будут отображаться работы района -->
-        </div>
-        <button onclick="goBack()">Назад к районам</button>
+    <!-- Нижнее меню -->
+    <div class="menu">
+        <button id="workButton" class="active">Work</button>
+        <button id="friendsButton">Friends</button>
     </div>
 
     <script>
-        // Данные по работам для каждого района
-        const districts = {
-            1: {
-                name: 'Район 1',
-                jobs: [
-                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
-                ]
-            },
-            2: {
-                name: 'Район 2',
-                jobs: [
-                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
-                ]
-            },
-            3: {
-                name: 'Район 3',
-                jobs: [
-                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
-                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
-                ]
-            }
-        };
-
-        // Функция для открытия района и отображения его работ
+        // Открытие страницы района
         function openDistrict(districtId) {
-            const district = districts[districtId];
-            document.getElementById('districtName').innerText = district.name;
-
-            const jobsList = document.getElementById('jobsList');
-            jobsList.innerHTML = '';
-
-            district.jobs.forEach(job => {
-                const jobElement = document.createElement('div');
-                jobElement.classList.add('job');
-                jobElement.innerHTML = `
-                    <img src="${job.img}" alt="${job.name}">
-                    <span>${job.name}</span>
-                    <button onclick="performJob('${district.name}', '${job.name}')">Выполнить</button>
-                `;
-                jobsList.appendChild(jobElement);
-            });
-
-            // Скрываем страницу с районами и отображаем страницу с работами
-            document.getElementById('districtsPage').style.display = 'none';
-            document.getElementById('jobsPage').style.display = 'block';
+            alert(`Перешли в район ${districtId}`);
         }
 
-        // Функция для возврата к выбору районов
-        function goBack() {
-            document.getElementById('districtsPage').style.display = 'block';
-            document.getElementById('jobsPage').style.display = 'none';
-        }
-
-        // Функция для выполнения работы
-        function performJob(district, job) {
-            alert(`Выполнение ${job} в ${district}`);
-        }
+        // Обработка кнопок меню (пример)
+        document.getElementById('workButton').addEventListener('click', function() {
+            alert('Work');
+        });
+        document.getElementById('friendsButton').addEventListener('click', function() {
+            alert('Friends');
+        });
     </script>
 </body>
 </html>
