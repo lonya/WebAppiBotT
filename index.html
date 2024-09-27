@@ -31,19 +31,26 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 600px;
-            display: none; /* Все страницы скрыты по умолчанию */
-        }
-        .active {
-            display: block; /* Отображаем активную страницу */
         }
         .district {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .district h2 {
-            margin-bottom: 10px;
+        .district img {
+            width: 50px;
+            height: 50px;
         }
         .job {
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .job img {
+            width: 50px;
+            height: 50px;
         }
         .menu {
             display: flex;
@@ -66,141 +73,107 @@
         .menu button.active {
             background-color: #d0d0d0;
         }
-        .job button {
-            padding: 5px 10px;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
-    <!-- Контейнер для контента -->
-    <div class="content">
-        <!-- Страница Work -->
-        <div id="workPage" class="container active">
-            <h1>Выберите район и работу</h1>
-
-            <!-- Район 1 -->
-            <div class="district">
-                <h2>Район 1</h2>
-                <div class="job">
-                    <span>Работа 1</span>
-                    <button onclick="performJob('Район 1', 'Работа 1')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 2</span>
-                    <button onclick="performJob('Район 1', 'Работа 2')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 3</span>
-                    <button onclick="performJob('Район 1', 'Работа 3')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 4</span>
-                    <button onclick="performJob('Район 1', 'Работа 4')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 5</span>
-                    <button onclick="performJob('Район 1', 'Работа 5')">Выполнить</button>
-                </div>
-            </div>
-
-            <!-- Район 2 -->
-            <div class="district">
-                <h2>Район 2</h2>
-                <div class="job">
-                    <span>Работа 1</span>
-                    <button onclick="performJob('Район 2', 'Работа 1')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 2</span>
-                    <button onclick="performJob('Район 2', 'Работа 2')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 3</span>
-                    <button onclick="performJob('Район 2', 'Работа 3')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 4</span>
-                    <button onclick="performJob('Район 2', 'Работа 4')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 5</span>
-                    <button onclick="performJob('Район 2', 'Работа 5')">Выполнить</button>
-                </div>
-            </div>
-
-            <!-- Район 3 -->
-            <div class="district">
-                <h2>Район 3</h2>
-                <div class="job">
-                    <span>Работа 1</span>
-                    <button onclick="performJob('Район 3', 'Работа 1')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 2</span>
-                    <button onclick="performJob('Район 3', 'Работа 2')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 3</span>
-                    <button onclick="performJob('Район 3', 'Работа 3')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 4</span>
-                    <button onclick="performJob('Район 3', 'Работа 4')">Выполнить</button>
-                </div>
-                <div class="job">
-                    <span>Работа 5</span>
-                    <button onclick="performJob('Район 3', 'Работа 5')">Выполнить</button>
-                </div>
-            </div>
+    <!-- Контейнер для страницы с районами -->
+    <div id="districtsPage" class="container">
+        <h1>Выберите район</h1>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 1">
+            <span>Район 1</span>
+            <button onclick="openDistrict(1)">Перейти</button>
         </div>
-
-        <!-- Страница Friends -->
-        <div id="friendsPage" class="container">
-            <h1>Привет, это Friends страница!</h1>
-            <p>Здесь будут отображаться твои друзья.</p>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 2">
+            <span>Район 2</span>
+            <button onclick="openDistrict(2)">Перейти</button>
+        </div>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 3">
+            <span>Район 3</span>
+            <button onclick="openDistrict(3)">Перейти</button>
         </div>
     </div>
 
-    <!-- Нижнее меню -->
-    <div class="menu">
-        <button id="workButton" class="active">Work</button>
-        <button id="friendsButton">Friends</button>
+    <!-- Контейнер для страницы с работами -->
+    <div id="jobsPage" class="container" style="display: none;">
+        <h1 id="districtName">Работы</h1>
+        <div id="jobsList">
+            <!-- Здесь будут отображаться работы района -->
+        </div>
+        <button onclick="goBack()">Назад к районам</button>
     </div>
 
     <script>
+        // Данные по работам для каждого района
+        const districts = {
+            1: {
+                name: 'Район 1',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
+                ]
+            },
+            2: {
+                name: 'Район 2',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
+                ]
+            },
+            3: {
+                name: 'Район 3',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
+                ]
+            }
+        };
+
+        // Функция для открытия района и отображения его работ
+        function openDistrict(districtId) {
+            const district = districts[districtId];
+            document.getElementById('districtName').innerText = district.name;
+
+            const jobsList = document.getElementById('jobsList');
+            jobsList.innerHTML = '';
+
+            district.jobs.forEach(job => {
+                const jobElement = document.createElement('div');
+                jobElement.classList.add('job');
+                jobElement.innerHTML = `
+                    <img src="${job.img}" alt="${job.name}">
+                    <span>${job.name}</span>
+                    <button onclick="performJob('${district.name}', '${job.name}')">Выполнить</button>
+                `;
+                jobsList.appendChild(jobElement);
+            });
+
+            // Скрываем страницу с районами и отображаем страницу с работами
+            document.getElementById('districtsPage').style.display = 'none';
+            document.getElementById('jobsPage').style.display = 'block';
+        }
+
+        // Функция для возврата к выбору районов
+        function goBack() {
+            document.getElementById('districtsPage').style.display = 'block';
+            document.getElementById('jobsPage').style.display = 'none';
+        }
+
         // Функция для выполнения работы
         function performJob(district, job) {
             alert(`Выполнение ${job} в ${district}`);
-            // Здесь можно добавить дополнительную логику выполнения работы
         }
-
-        // Функция для переключения страниц
-        function showPage(pageId) {
-            // Скрываем все страницы
-            document.getElementById('workPage').classList.remove('active');
-            document.getElementById('friendsPage').classList.remove('active');
-            // Отображаем нужную страницу
-            document.getElementById(pageId).classList.add('active');
-            
-            // Обновляем состояние кнопок
-            document.getElementById('workButton').classList.remove('active');
-            document.getElementById('friendsButton').classList.remove('active');
-            if (pageId === 'workPage') {
-                document.getElementById('workButton').classList.add('active');
-            } else {
-                document.getElementById('friendsButton').classList.add('active');
-            }
-        }
-
-        // Добавляем обработчики для кнопок меню
-        document.getElementById('workButton').addEventListener('click', function() {
-            showPage('workPage');
-        });
-
-        document.getElementById('friendsButton').addEventListener('click', function() {
-            showPage('friendsPage');
-        });
     </script>
 </body>
 </html>
