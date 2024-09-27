@@ -25,11 +25,18 @@
         h1 {
             margin-bottom: 20px;
         }
+        p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="greeting">Загрузка...</h1>
+        <p id="userId"></p>
+        <p id="userFirstName"></p>
+        <p id="userLastName"></p>
+        <p id="userUsername"></p>
     </div>
 
     <script>
@@ -43,15 +50,15 @@
         if (user) {
             const greetingText = `Привет, ${user.first_name} ${user.last_name || ''}!`;
             document.getElementById('greeting').innerText = greetingText;
+
+            // Выводим данные пользователя на страницу
+            document.getElementById('userId').innerText = `ID пользователя: ${user.id}`;
+            document.getElementById('userFirstName').innerText = `Имя: ${user.first_name}`;
+            document.getElementById('userLastName').innerText = `Фамилия: ${user.last_name || 'Не указана'}`;
+            document.getElementById('userUsername').innerText = `Username: ${user.username || 'Не указан'}`;
         } else {
             document.getElementById('greeting').innerText = 'Привет, незнакомец!';
         }
-
-        // Ты можешь получить дополнительные данные, такие как:
-        console.log("ID пользователя:", user.id);
-        console.log("Имя:", user.first_name);
-        console.log("Фамилия:", user.last_name);
-        console.log("Username:", user.username);
     </script>
 </body>
 </html>
