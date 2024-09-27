@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра</title>
+    <title>Мини-приложение</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: space-between;
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
@@ -21,44 +21,78 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+            display: none; /* Все страницы скрыты по умолчанию */
         }
-        h1 {
-            margin-bottom: 20px;
+        #workPage, #friendsPage {
+            display: none;
         }
-        p {
-            margin: 5px 0;
+        .active {
+            display: block; /* Отображаем активную страницу */
+        }
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        .menu button {
+            padding: 10px;
+            width: 100%;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+        }
+        .menu button.active {
+            background-color: #d0d0d0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="greeting">Загрузка...</h1>
-        <p id="userId"></p>
-        <p id="userFirstName"></p>
-        <p id="userLastName"></p>
-        <p id="userUsername"></p>
+    <!-- Контейнеры для страниц -->
+    <div id="workPage" class="container active">
+        <h1>Привет, это Work страница!</h1>
+        <p>Здесь ты можешь выполнять работу.</p>
+    </div>
+    <div id="friendsPage" class="container">
+        <h1>Привет, это Friends страница!</h1>
+        <p>Здесь будут отображаться твои друзья.</p>
+    </div>
+
+    <!-- Нижнее меню -->
+    <div class="menu">
+        <button id="workButton" class="active">Work</button>
+        <button id="friendsButton">Friends</button>
     </div>
 
     <script>
-        // Telegram SDK готов
-        window.Telegram.WebApp.ready();
-
-        // Получение данных пользователя
-        const user = window.Telegram.WebApp.initDataUnsafe.user;
-
-        // Проверка, есть ли данные пользователя
-        if (user) {
-            const greetingText = `Привет, ${user.first_name} ${user.last_name || ''}!`;
-            document.getElementById('greeting').innerText = greetingText;
-
-            // Выводим данные пользователя на страницу
-            document.getElementById('userId').innerText = `ID пользователя: ${user.id}`;
-            document.getElementById('userFirstName').innerText = `Имя: ${user.first_name}`;
-            document.getElementById('userLastName').innerText = `Фамилия: ${user.last_name || 'Не указана'}`;
-            document.getElementById('userUsername').innerText = `Username: ${user.username || 'Не указан'}`;
-        } else {
-            document.getElementById('greeting').innerText = 'Привет, незнакомец!';
+        // Функция для переключения страниц
+        function showPage(pageId) {
+            // Скрываем все страницы
+            document.getElementById('workPage').classList.remove('active');
+            document.getElementById('friendsPage').classList.remove('active');
+            // Отображаем нужную страницу
+            document.getElementById(pageId).classList.add('active');
+            
+            // Обновляем состояние кнопок
+            document.getElementById('workButton').classList.remove('active');
+            document.getElementById('friendsButton').classList.remove('active');
+            if (pageId === 'workPage') {
+                document.getElementById('workButton').classList.add('active');
+            } else {
+                document.getElementById('friendsButton').classList.add('active');
+            }
         }
+
+        // Добавляем обработчики для кнопок меню
+        document.getElementById('workButton').addEventListener('click', function() {
+            showPage('workPage');
+        });
+
+        document.getElementById('friendsButton').addEventListener('click', function() {
+            showPage('friendsPage');
+        });
     </script>
 </body>
 </html>
