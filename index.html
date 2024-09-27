@@ -29,6 +29,10 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
+            display: none; /* Скрываем контейнеры по умолчанию */
+        }
+        .active {
+            display: block; /* Отображаем только активный контейнер */
         }
         .district {
             display: flex;
@@ -45,6 +49,17 @@
         .district button {
             padding: 10px 20px;
             flex-shrink: 0;
+        }
+        .job {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .job img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
         }
         .menu {
             display: flex;
@@ -76,25 +91,32 @@
 </head>
 <body>
     <!-- Контейнер для страницы с районами -->
-    <div class="content">
-        <div id="districtsPage" class="container">
-            <h1>Выберите район</h1>
-            <div class="district">
-                <img src="https://via.placeholder.com/50" alt="Район 1">
-                <span>Район 1</span>
-                <button onclick="openDistrict(1)">Перейти</button>
-            </div>
-            <div class="district">
-                <img src="https://via.placeholder.com/50" alt="Район 2">
-                <span>Район 2</span>
-                <button onclick="openDistrict(2)">Перейти</button>
-            </div>
-            <div class="district">
-                <img src="https://via.placeholder.com/50" alt="Район 3">
-                <span>Район 3</span>
-                <button onclick="openDistrict(3)">Перейти</button>
-            </div>
+    <div id="districtsPage" class="container active">
+        <h1>Выберите район</h1>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 1">
+            <span>Район 1</span>
+            <button onclick="openDistrict(1)">Перейти</button>
         </div>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 2">
+            <span>Район 2</span>
+            <button onclick="openDistrict(2)">Перейти</button>
+        </div>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 3">
+            <span>Район 3</span>
+            <button onclick="openDistrict(3)">Перейти</button>
+        </div>
+    </div>
+
+    <!-- Контейнер для страницы с работами -->
+    <div id="jobsPage" class="container">
+        <h1 id="districtName">Работы в районе</h1>
+        <div id="jobsList">
+            <!-- Список работ появится здесь -->
+        </div>
+        <button onclick="goBack()">Назад к районам</button>
     </div>
 
     <!-- Нижнее меню -->
@@ -104,9 +126,73 @@
     </div>
 
     <script>
-        // Открытие страницы района
+        // Данные по работам для каждого района
+        const districts = {
+            1: {
+                name: 'Район 1',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
+                ]
+            },
+            2: {
+                name: 'Район 2',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
+                ]
+            },
+            3: {
+                name: 'Район 3',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 4', img: 'https://via.placeholder.com/50' },
+                    { name: 'Работа 5', img: 'https://via.placeholder.com/50' }
+                ]
+            }
+        };
+
+        // Функция для открытия страницы района с работами
         function openDistrict(districtId) {
-            alert(`Перешли в район ${districtId}`);
+            const district = districts[districtId];
+            document.getElementById('districtName').innerText = district.name;
+
+            const jobsList = document.getElementById('jobsList');
+            jobsList.innerHTML = ''; // Очищаем предыдущие работы
+
+            district.jobs.forEach(job => {
+                const jobElement = document.createElement('div');
+                jobElement.classList.add('job');
+                jobElement.innerHTML = `
+                    <img src="${job.img}" alt="${job.name}">
+                    <span>${job.name}</span>
+                    <button onclick="performJob('${district.name}', '${job.name}')">Выполнить</button>
+                `;
+                jobsList.appendChild(jobElement);
+            });
+
+            // Переключаем страницы
+            document.getElementById('districtsPage').classList.remove('active');
+            document.getElementById('jobsPage').classList.add('active');
+        }
+
+        // Функция для возврата к выбору районов
+        function goBack() {
+            document.getElementById('districtsPage').classList.add('active');
+            document.getElementById('jobsPage').classList.remove('active');
+        }
+
+        // Функция для выполнения работы
+        function performJob(district, job) {
+            alert(`Выполнение ${job} в ${district}`);
         }
 
         // Обработка кнопок меню (пример)
