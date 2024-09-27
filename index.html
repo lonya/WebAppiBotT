@@ -21,6 +21,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-y: auto;
         }
         .container {
             text-align: center;
@@ -34,6 +35,15 @@
         }
         .active {
             display: block; /* Отображаем активную страницу */
+        }
+        .district {
+            margin-bottom: 20px;
+        }
+        .district h2 {
+            margin-bottom: 10px;
+        }
+        .job {
+            margin-bottom: 10px;
         }
         .menu {
             display: flex;
@@ -56,6 +66,10 @@
         .menu button.active {
             background-color: #d0d0d0;
         }
+        .job button {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -63,9 +77,84 @@
     <div class="content">
         <!-- Страница Work -->
         <div id="workPage" class="container active">
-            <h1>Привет, это Work страница!</h1>
-            <p>Здесь ты можешь выполнять работу.</p>
+            <h1>Выберите район и работу</h1>
+
+            <!-- Район 1 -->
+            <div class="district">
+                <h2>Район 1</h2>
+                <div class="job">
+                    <span>Работа 1</span>
+                    <button onclick="performJob('Район 1', 'Работа 1')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 2</span>
+                    <button onclick="performJob('Район 1', 'Работа 2')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 3</span>
+                    <button onclick="performJob('Район 1', 'Работа 3')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 4</span>
+                    <button onclick="performJob('Район 1', 'Работа 4')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 5</span>
+                    <button onclick="performJob('Район 1', 'Работа 5')">Выполнить</button>
+                </div>
+            </div>
+
+            <!-- Район 2 -->
+            <div class="district">
+                <h2>Район 2</h2>
+                <div class="job">
+                    <span>Работа 1</span>
+                    <button onclick="performJob('Район 2', 'Работа 1')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 2</span>
+                    <button onclick="performJob('Район 2', 'Работа 2')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 3</span>
+                    <button onclick="performJob('Район 2', 'Работа 3')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 4</span>
+                    <button onclick="performJob('Район 2', 'Работа 4')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 5</span>
+                    <button onclick="performJob('Район 2', 'Работа 5')">Выполнить</button>
+                </div>
+            </div>
+
+            <!-- Район 3 -->
+            <div class="district">
+                <h2>Район 3</h2>
+                <div class="job">
+                    <span>Работа 1</span>
+                    <button onclick="performJob('Район 3', 'Работа 1')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 2</span>
+                    <button onclick="performJob('Район 3', 'Работа 2')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 3</span>
+                    <button onclick="performJob('Район 3', 'Работа 3')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 4</span>
+                    <button onclick="performJob('Район 3', 'Работа 4')">Выполнить</button>
+                </div>
+                <div class="job">
+                    <span>Работа 5</span>
+                    <button onclick="performJob('Район 3', 'Работа 5')">Выполнить</button>
+                </div>
+            </div>
         </div>
+
         <!-- Страница Friends -->
         <div id="friendsPage" class="container">
             <h1>Привет, это Friends страница!</h1>
@@ -80,6 +169,12 @@
     </div>
 
     <script>
+        // Функция для выполнения работы
+        function performJob(district, job) {
+            alert(`Выполнение ${job} в ${district}`);
+            // Здесь можно добавить дополнительную логику выполнения работы
+        }
+
         // Функция для переключения страниц
         function showPage(pageId) {
             // Скрываем все страницы
