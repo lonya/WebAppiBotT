@@ -199,7 +199,11 @@
 
             // Проверяем, все ли работы в районе завершены
             if (districts[districtId].jobs.every(j => j.currentCount >= j.maxCount)) {
-                alert('Все работы в районе выполнены!');
+                alert('Все работы в районе выполнены! Все работы будут сброшены.');
+
+                // Сбрасываем все работы в районе
+                districts[districtId].jobs.forEach(job => job.currentCount = 0);
+                openDistrict(districtId); // Перерисовываем работы после сброса
             }
         }
 
