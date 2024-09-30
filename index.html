@@ -12,6 +12,19 @@
             display: flex;
             flex-direction: column;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #ccc;
+            font-size: 18px;
+        }
+        .currency {
+            display: flex;
+            gap: 20px;
+        }
         .content {
             flex-grow: 1;
             padding: 20px;
@@ -90,6 +103,14 @@
     </style>
 </head>
 <body>
+    <!-- Вводим валюты в шапке -->
+    <div class="header">
+        <div class="currency">
+            <span>Энергия: <span id="energy">100</span></span>
+            <span>Монеты: <span id="coins">0</span></span>
+        </div>
+    </div>
+
     <!-- Страница с районами -->
     <div id="districtsPage" class="container active">
         <h1>Выберите район</h1>
@@ -120,30 +141,34 @@
     </div>
 
     <script>
+        // Валюты
+        let energy = 100;
+        let coins = 0;
+
         // Данные по районам и работам
         const districts = {
             1: {
                 name: 'Район 1',
                 jobs: [
-                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 },
-                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0 },
-                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0 }
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0, energyCost: 3, coinReward: 10 },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0, energyCost: 4, coinReward: 15 },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0, energyCost: 2, coinReward: 5 }
                 ]
             },
             2: {
                 name: 'Район 2',
                 jobs: [
-                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 4, currentCount: 0 },
-                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 },
-                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0 }
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 4, currentCount: 0, energyCost: 5, coinReward: 20 },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0, energyCost: 2, coinReward: 8 },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0, energyCost: 3, coinReward: 12 }
                 ]
             },
             3: {
                 name: 'Район 3',
                 jobs: [
-                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0 },
-                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 4, currentCount: 0 },
-                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 }
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0, energyCost: 1, coinReward: 3 },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 4, currentCount: 0, energyCost: 4, coinReward: 16 },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0, energyCost: 3, coinReward: 9 }
                 ]
             }
         };
@@ -169,7 +194,7 @@
                 // Создание HTML для работы
                 jobElement.innerHTML = `
                     <img src="${job.img}" alt="${job.name}">
-                    <span>${job.name}</span>
+                    <span>${job.name} (Энергия: ${job.energyCost}, Награда: ${job.coinReward} монет)</span>
                     <div class="cells">${cellsHTML}</div>
                     <button onclick="performJob(${districtId}, ${index})" ${job.currentCount >= job.maxCount ? 'disabled' : ''}>Выполнить</button>
                 `;
@@ -192,8 +217,22 @@
         function performJob(districtId, jobIndex) {
             const job = districts[districtId].jobs[jobIndex];
 
+            // Проверяем, хватает ли энергии для выполнения работы
+            if (energy < job.energyCost) {
+                alert('Недостаточно энергии для выполнения работы!');
+                return;
+            }
+
             if (job.currentCount < job.maxCount) {
                 job.currentCount++;
+
+                // Уменьшаем энергию и добавляем монеты
+                energy -= job.energyCost;
+                coins += job.coinReward;
+
+                // Обновляем интерфейс валют
+                updateCurrency();
+
                 openDistrict(districtId); // Перерисовываем список работ после выполнения
             }
 
@@ -205,6 +244,12 @@
                 districts[districtId].jobs.forEach(job => job.currentCount = 0);
                 openDistrict(districtId); // Перерисовываем работы после сброса
             }
+        }
+
+        // Функция для обновления интерфейса валют
+        function updateCurrency() {
+            document.getElementById('energy').innerText = energy;
+            document.getElementById('coins').innerText = coins;
         }
 
         // Инициализация: отображаем список районов
