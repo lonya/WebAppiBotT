@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Работы в районе</title>
+    <title>Работы в районах</title>
     <style>
         body, html {
             margin: 0;
@@ -32,6 +32,22 @@
         }
         .active {
             display: block; /* Отображаем только активный контейнер */
+        }
+        .district {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .district img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+        .district button {
+            padding: 10px 20px;
+            flex-shrink: 0;
         }
         .job {
             display: flex;
@@ -74,28 +90,69 @@
     </style>
 </head>
 <body>
-    <!-- Контейнер для страницы с работами -->
-    <div id="jobsPage" class="container active">
+    <!-- Страница с районами -->
+    <div id="districtsPage" class="container active">
+        <h1>Выберите район</h1>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 1">
+            <span>Район 1</span>
+            <button onclick="openDistrict(1)">Перейти</button>
+        </div>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 2">
+            <span>Район 2</span>
+            <button onclick="openDistrict(2)">Перейти</button>
+        </div>
+        <div class="district">
+            <img src="https://via.placeholder.com/50" alt="Район 3">
+            <span>Район 3</span>
+            <button onclick="openDistrict(3)">Перейти</button>
+        </div>
+    </div>
+
+    <!-- Страница с работами -->
+    <div id="jobsPage" class="container">
         <h1 id="districtName">Работы в районе</h1>
         <div id="jobsList">
             <!-- Список работ -->
         </div>
-        <button onclick="resetJobs()">Обнулить все работы</button>
+        <button onclick="goBack()">Назад к районам</button>
     </div>
 
     <script>
-        // Данные по работам для каждого района, с лимитами выполнения
-        const district = {
-            name: 'Район 1',
-            jobs: [
-                { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 },
-                { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0 },
-                { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0 }
-            ]
+        // Данные по районам и работам
+        const districts = {
+            1: {
+                name: 'Район 1',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0 },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0 }
+                ]
+            },
+            2: {
+                name: 'Район 2',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 4, currentCount: 0 },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 5, currentCount: 0 }
+                ]
+            },
+            3: {
+                name: 'Район 3',
+                jobs: [
+                    { name: 'Работа 1', img: 'https://via.placeholder.com/50', maxCount: 2, currentCount: 0 },
+                    { name: 'Работа 2', img: 'https://via.placeholder.com/50', maxCount: 4, currentCount: 0 },
+                    { name: 'Работа 3', img: 'https://via.placeholder.com/50', maxCount: 3, currentCount: 0 }
+                ]
+            }
         };
 
-        // Функция для отображения списка работ
-        function renderJobs() {
+        // Функция для открытия района с работами
+        function openDistrict(districtId) {
+            const district = districts[districtId];
+            document.getElementById('districtName').innerText = district.name;
+
             const jobsList = document.getElementById('jobsList');
             jobsList.innerHTML = ''; // Очищаем предыдущие работы
 
@@ -103,47 +160,51 @@
                 const jobElement = document.createElement('div');
                 jobElement.classList.add('job');
 
-                // Генерируем ячейки выполнения работы
+                // Генерация ячеек выполнения работы
                 let cellsHTML = '';
                 for (let i = 0; i < job.maxCount; i++) {
                     cellsHTML += `<div class="cell ${i < job.currentCount ? 'filled' : ''}"></div>`;
                 }
 
-                // Создаем HTML для работы
+                // Создание HTML для работы
                 jobElement.innerHTML = `
                     <img src="${job.img}" alt="${job.name}">
                     <span>${job.name}</span>
                     <div class="cells">${cellsHTML}</div>
-                    <button onclick="performJob(${index})" ${job.currentCount >= job.maxCount ? 'disabled' : ''}>Выполнить</button>
+                    <button onclick="performJob(${districtId}, ${index})" ${job.currentCount >= job.maxCount ? 'disabled' : ''}>Выполнить</button>
                 `;
 
                 jobsList.appendChild(jobElement);
             });
+
+            // Переключение страниц
+            document.getElementById('districtsPage').classList.remove('active');
+            document.getElementById('jobsPage').classList.add('active');
+        }
+
+        // Функция для возврата на страницу с районами
+        function goBack() {
+            document.getElementById('districtsPage').classList.add('active');
+            document.getElementById('jobsPage').classList.remove('active');
         }
 
         // Функция для выполнения работы
-        function performJob(index) {
-            const job = district.jobs[index];
+        function performJob(districtId, jobIndex) {
+            const job = districts[districtId].jobs[jobIndex];
 
             if (job.currentCount < job.maxCount) {
                 job.currentCount++;
-                renderJobs(); // Перерисовываем список работ
+                openDistrict(districtId); // Перерисовываем список работ после выполнения
             }
 
-            // Проверяем, все ли работы завершены
-            if (district.jobs.every(j => j.currentCount >= j.maxCount)) {
-                alert('Все работы выполнены! Теперь можно обнулить.');
+            // Проверяем, все ли работы в районе завершены
+            if (districts[districtId].jobs.every(j => j.currentCount >= j.maxCount)) {
+                alert('Все работы в районе выполнены!');
             }
         }
 
-        // Функция для обнуления всех работ
-        function resetJobs() {
-            district.jobs.forEach(job => job.currentCount = 0); // Обнуляем все работы
-            renderJobs(); // Перерисовываем список работ
-        }
-
-        // Инициализация страницы с работами
-        renderJobs();
+        // Инициализация: отображаем список районов
+        document.getElementById('districtsPage').classList.add('active');
     </script>
 </body>
 </html>
